@@ -23,9 +23,7 @@ public class Dates implements Comparable{
 	}
 	
 	public String toString()
-	{
-		//return (new StringBuffer("{Task: ").append(task).append("\tDate: ").append(Integer.toString(date)).append("}")).toString();
-		
+	{	
 		//Changed for readability in the export file
 		return (new StringBuffer("{Date: ").append(Integer.toString(date)).append("\t\tTask: ").append(task).append("}")).toString();
 	}
@@ -67,7 +65,6 @@ public class Dates implements Comparable{
 		{
 			Dates d = (Dates) o;
 			return this.date - d.date;
-			//return d.date - this.date;
 		}
 		else
 		{

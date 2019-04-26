@@ -1,16 +1,8 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Date;
 import java.util.Comparator;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
+
 
 
 public class Model {
@@ -40,16 +32,7 @@ public class Model {
 	{
 		return (GregorianCalendar) selectedDay.clone();
 	}
-	
-	/*public String formatToday()
-	{
-		return MonthDYYYY.format(new Date(today.get(Calendar.YEAR)-1900, today.get(Calendar.MONTH), today.get(Calendar.DATE)));
-	}*/
-	
-	/*public String formatTaskDate() //used to get
-	{
-		return DMonthDYYYY.format(new Date(selectedDay.get(Calendar.YEAR)-1900, selectedDay.get(Calendar.MONTH), selectedDay.get(Calendar.DATE)));
-	}*/
+
 	
 	public void addTask(String name)
 	{
