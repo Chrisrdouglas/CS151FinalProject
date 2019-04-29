@@ -28,6 +28,11 @@ public class Model {
 		return (GregorianCalendar) selectedMonth.clone();
 	}
 	
+	public GregorianCalendar setSelectedMonth(GregorianCalendar g)
+	{
+		selectedMonth = g;
+	}
+	
 	public GregorianCalendar getToday()
 	{
 		return (GregorianCalendar) today.clone();
