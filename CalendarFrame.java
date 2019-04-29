@@ -21,13 +21,24 @@ public class CalendarFrame {
 		
 		//month and years
 		JLabel month = new JLabel("January");		//**TEMP TEST VALUE
-		Integer[] years = {2014, 2015};					//**TEMP TEST VALUES
-		JComboBox<Integer> yearMenu = new JComboBox<Integer>(years);	//**DROPDOWN MENU OR ARROWS??
+		JPanel yearPanel = new JPanel();
+		yearPanel.setLayout(new FlowLayout());
+		JTextField year = new JTextField("2014");			//**TEMP TEST VALUE
+		year.setEnabled(false);
+		yearPanel.add(year);
+		BasicArrowButton upArrow = new BasicArrowButton(BasicArrowButton.NORTH);
+		BasicArrowButton downArrow = new BasicArrowButton(BasicArrowButton.SOUTH);
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(2,1));
+		buttons.add(upArrow);
+		buttons.add(downArrow);
+		yearPanel.add(buttons);
+		
 	
 		//add stuff to navigation panel
 		navigation.add(leftArrow);
 		navigation.add(month);
-		navigation.add(yearMenu);
+		navigation.add(yearPanel);
 		navigation.add(rightArrow);
 		
 		//days of week panel
