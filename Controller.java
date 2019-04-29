@@ -36,6 +36,16 @@ public class Controller {
 		this.v = view;
 	}
 	
+	public void addMonth()
+	{
+		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.MONTH, 1);
+	}
+	
+	public void subMonth()
+	{
+		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.MONTH, -1);
+	}
+	
 	public String formatToday()
 	{
 		GregorianCalendar today = m.getToday();
