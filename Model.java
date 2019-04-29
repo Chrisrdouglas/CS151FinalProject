@@ -23,6 +23,11 @@ public class Model {
 		controller = c;
 	}
 	
+	public GregorianCalendar getSelectedMonth()
+	{
+		return (GregorianCalendar) selectedMonth.clone();
+	}
+	
 	public GregorianCalendar getToday()
 	{
 		return (GregorianCalendar) today.clone();
