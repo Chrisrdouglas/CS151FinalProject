@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -12,11 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicArrowButton;
 
-public class View {
+public class View implements ActionListener {
 	//Variables--------------------------------------------------
 	private Model m;
 	private Controller c;
-	private CalendarFrame cf;
+	private JFrame cFrame;
 	private TaskFrame tf;
 	
 	//Methods----------------------------------------------------
@@ -38,8 +41,10 @@ public class View {
 	
 	public void drawCF()
 	{
-		JFrame frame = new JFrame();
-		frame.setLayout(new BorderLayout());
+		
+		cFrame.getContentPane().removeAll();
+		
+		cFrame.setLayout(new BorderLayout());
 		
 		//panel that holds navigation/days of weeek
 		JPanel monthDisplay = new JPanel();
@@ -92,61 +97,120 @@ public class View {
 		//days of week panel
 		JPanel week = new JPanel();
 		week.setLayout(new GridLayout(1,7));
-		week.add(new JLabel("Sun"));
-		week.add(new JLabel("Mon"));
-		week.add(new JLabel("Tue"));
-		week.add(new JLabel("Wed"));
-		week.add(new JLabel("Thu"));
-		week.add(new JLabel("Fri"));
-		week.add(new JLabel("Sat"));
+		week.add(new JLabel("    Sun"));
+		week.add(new JLabel("    Mon"));
+		week.add(new JLabel("    Tue"));
+		week.add(new JLabel("    Wed"));
+		week.add(new JLabel("    Thu"));
+		week.add(new JLabel("    Fri"));
+		week.add(new JLabel("    Sat"));
 		
 		//add stuff to monthDisplay
 		monthDisplay.add(navigation);
 		monthDisplay.add(week);
+		
+		//add the numbers
+		JPanel dates = new JPanel();
+		//dates.setLayout(new GridLayout(5,7));
+		ArrayList<JButton> dat = this.drawDates();
+		dates.setLayout(new GridLayout(dat.size()/7,7));
+		for(JButton i : dat)
+		{
+			dates.add(i);
+		}
+		
+		
 		
 		//display today's date
 		String todayDate = "Today: " + c.formatToday();
 		JLabel today = new JLabel(todayDate);
 		
 		//add stuff to frame
-		frame.add(monthDisplay, BorderLayout.NORTH);
-		//frame.add(dates, BorderLayout.CENTER);
-		frame.add(today, BorderLayout.SOUTH);
-		frame.setSize(375,300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		cFrame.add(monthDisplay, BorderLayout.NORTH);
+		cFrame.add(dates, BorderLayout.CENTER);
+		cFrame.add(today, BorderLayout.SOUTH);
+		cFrame.repaint();
+		cFrame.setSize(375,300);
+		cFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		cFrame.setVisible(true);
 	}
 	
-	public void drawDates() {
+	public ArrayList<JButton> drawDates() {
+		ArrayList<JButton> i = new ArrayList<>();
+		JButton b = null;
 		GregorianCalendar selectedMonth = m.getSelectedMonth();
-		while(selectedMonth.get(Calendar.DATE) != 1)
+		while(selectedMonth.get(Calendar.DATE) != 1) //bring everything back to 1
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1)
+		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) //bring everything back to saturday
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		while(selectedMonth.get(Calendar.DATE) != 1)
+		while(selectedMonth.get(Calendar.DATE) != 1) //add previous months days
 		{
 			//**ADD GRAYED OUT DATES HERE
+			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH))
+		//while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) //add up until end of month
+		while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) //add up until end of month
 		{
 			//**PRINT BLACK DATE
+			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 7)
+		
+		if(selectedMonth.get(Calendar.DATE) == 31)
+		{
+			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			i.add(b);
+			selectedMonth.add(Calendar.DATE, 1);
+		}
+		
+		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 7) //add until saturday gets added
 		{
 			//**PRINT GRAY DATE
+			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			i.add(b);
+			selectedMonth.add(Calendar.DATE, 1);
 		}
 		//**PRINT GRAY SATURDAY
+		b = this.createDate(selectedMonth.get(Calendar.DATE));
+		i.add(b);
+		
+		return i;
 	}
+	
+	public JButton createDate(int date){
+		String num = String.valueOf(date);
+		JButton day = new JButton(num);
+		day.setFocusPainted(false);
+		day.setContentAreaFilled(false);
+		//day.setBorderPainted(false);
+		return day;
+		}
+	
+	public static void createDate(int date, JComponent c){
+		String num = String.valueOf(date);
+		JButton day = new JButton(num);
+		//day.setFocusPainted(false);
+		day.setContentAreaFilled(false);
+		//day.setBorderPainted(false);
+		c.add(day);
+		}	
 	
 
 	public void drawTF()
 	{
+		
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 	
@@ -155,7 +219,9 @@ public class View {
 	{
 		m = null;
 		c = null;
-		cf = new CalendarFrame();
+		cFrame = new JFrame();
 		tf = new TaskFrame();
 	}
+
+
 }
