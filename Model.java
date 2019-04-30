@@ -40,6 +40,11 @@ public class Model {
 		return (GregorianCalendar) today.clone();
 	}
 	
+	public void setSelectedDay(GregorianCalendar g)
+	{
+		selectedDay = g; 
+	}
+	
 	public GregorianCalendar getSelectedDay()
 	{
 		return (GregorianCalendar) selectedDay.clone();
@@ -72,7 +77,7 @@ public class Model {
 		Comparator<Dates> byDate = (Dates o1, Dates o2)->{return o1.compareTo(o2);};
 		days.sort(byDate);
 		
-		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}
 	
 	public void removeTask()
@@ -93,7 +98,7 @@ public class Model {
 			}
 		}
 		
-		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}
 	
 	public void removeTask(String name, int year, int month, int day)

@@ -42,6 +42,7 @@ public class View implements ActionListener {
 	public void addBoth(Model m, Controller c)
 	{
 		this.m = m;
+		
 		this.c = c;
 	}
 	
@@ -158,6 +159,10 @@ public class View implements ActionListener {
 		{
 			//**ADD GRAYED OUT DATES HERE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.addActionListener(event -> 
+			{
+				c.subMonth();
+			});
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
@@ -166,6 +171,13 @@ public class View implements ActionListener {
 		{
 			//**PRINT BLACK DATE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.addActionListener(event -> 
+			{
+				c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
+			});
+		//okay so you're not going to understand what i did here when you look at this x days from now...
+		//basically we got the event source (the JToggleButton), casted it,
+		//then got it's text, then told the controller to change the selected day
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
@@ -173,6 +185,10 @@ public class View implements ActionListener {
 		if(selectedMonth.get(Calendar.DATE) == 31)
 		{
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.addActionListener(event -> 
+			{
+				c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
+			});
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
@@ -181,11 +197,19 @@ public class View implements ActionListener {
 		{
 			//**PRINT GRAY DATE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.addActionListener(event -> 
+			{
+				c.addMonth();
+			});
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
 		//**PRINT GRAY SATURDAY
 		b = this.createDate(selectedMonth.get(Calendar.DATE));
+		b.addActionListener(event -> 
+		{
+			c.addMonth();
+		});
 		i.add(b);
 		this.f = i;
 		return i;

@@ -43,6 +43,15 @@ public class Controller {
 		this.v = view;
 	}
 	
+	public void changeSelectedDay(String s)
+	{
+		GregorianCalendar selectedMonth = m.getSelectedMonth();
+		selectedMonth.set(selectedMonth.get(Calendar.YEAR), selectedMonth.get(Calendar.MONTH), Integer.parseInt(s));
+		m.setSelectedDay(selectedMonth);
+																							//System.out.println(MonthDYYYY.format(new Date(selectedMonth.get(Calendar.YEAR)-1900, selectedMonth.get(Calendar.MONTH), selectedMonth.get(Calendar.DATE))));
+		//**DRAW TaskView FRAME CODE GOES HERE
+	}
+	
 	public void addMonth()
 	{
 		GregorianCalendar g = this.m.getSelectedMonth();
