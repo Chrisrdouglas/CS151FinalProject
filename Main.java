@@ -23,6 +23,8 @@ public class Main {
 		
 		c.export();
 		
+		v.drawCF();
+		
 	}
 
 	static void print(String s)

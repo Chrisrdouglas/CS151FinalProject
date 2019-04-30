@@ -23,12 +23,17 @@ public class Model {
 		controller = c;
 	}
 	
+	public int getSelectedYear()
+	{
+		return selectedMonth.get(Calendar.YEAR);
+	}
+	
 	public GregorianCalendar getSelectedMonth()
 	{
 		return (GregorianCalendar) selectedMonth.clone();
 	}
 	
-	public GregorianCalendar setSelectedMonth(GregorianCalendar g)
+	public void setSelectedMonth(GregorianCalendar g)
 	{
 		selectedMonth = g;
 	}

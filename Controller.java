@@ -38,27 +38,36 @@ public class Controller {
 	
 	public void addMonth()
 	{
-		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.MONTH, 1);
+		GregorianCalendar g = this.m.getSelectedMonth();
+		g.add(Calendar.MONTH, 1);
 		this.m.setSelectedMonth(g);
 	}
 	
 	public void subMonth()
 	{
-		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.MONTH, -1);
+		GregorianCalendar g = this.m.getSelectedMonth();
+		g.add(Calendar.MONTH, -1);
 		this.m.setSelectedMonth(g);
 	}
 	
 	
 	public void addYear()
 	{
-		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.YEAR, 1);
+		GregorianCalendar g = this.m.getSelectedMonth();
+		g.add(Calendar.YEAR, 1);
 		this.m.setSelectedMonth(g);
 	}
 	
 	public void subYear()
 	{
-		GregorianCalendar g = this.m.getSelectedMonth().add(Calendar.YEAR, -1);
+		GregorianCalendar g = this.m.getSelectedMonth();
+		g.add(Calendar.YEAR, -1);
 		this.m.setSelectedMonth(g);
+	}
+	
+	public String selectedMonthToString()
+	{
+		return "January";
 	}
 	
 	public String formatToday()
