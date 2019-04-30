@@ -21,7 +21,14 @@ public class Main {
 		
 		//print(d.toString());
 		
-		c.export();
+		//c.export();
+		
+		//c.importer("C:\\Users\\chris\\OneDrive\\workspaceO\\151 Final Project\\April_2019.txt");
+		
+		for(String s : m.exportList())
+		{
+			print(s);
+		}
 		
 		v.drawCF();
 		
