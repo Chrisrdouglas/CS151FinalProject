@@ -19,13 +19,12 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.basic.BasicArrowButton;
 
-public class View implements ActionListener {
+public class View{
 	//Variables--------------------------------------------------
 	private Model m;
 	private Controller c;
 	private JFrame cFrame;
-	private TaskFrame tf;
-	private ArrayList<JToggleButton> dateButtons;
+	private JFrame vFrame;
 	private ButtonGroup f;
 	
 	//Methods----------------------------------------------------
@@ -52,7 +51,7 @@ public class View implements ActionListener {
 		
 		cFrame.setLayout(new BorderLayout());
 		
-		//panel that holds navigation/days of weeek
+		//panel that holds navigation/days of week
 		JPanel monthDisplay = new JPanel();
 		monthDisplay.setLayout(new GridLayout(2,1));
 		
@@ -71,10 +70,10 @@ public class View implements ActionListener {
 		});
 		
 		//month and years
-		JLabel month = new JLabel(c.selectedMonthToString());		//**STILL NEEDS TO CHANGED IN CONTROLLER
+		JLabel month = new JLabel(c.selectedMonthToString());
 		JPanel yearPanel = new JPanel();
 		yearPanel.setLayout(new FlowLayout());
-		JTextField year = new JTextField(String.valueOf(m.getSelectedYear()));			//**maybe fixed
+		JTextField year = new JTextField(String.valueOf(m.getSelectedYear()));
 		year.setEnabled(false);
 		yearPanel.add(year);
 		BasicArrowButton upArrow = new BasicArrowButton(BasicArrowButton.NORTH);
@@ -142,7 +141,6 @@ public class View implements ActionListener {
 	
 	
 	public ButtonGroup drawDates() {
-		//ArrayList<JToggleButton> i = new ArrayList<>();
 		ButtonGroup i = new ButtonGroup();
 		JToggleButton b = null;
 		GregorianCalendar selectedMonth = m.getSelectedMonth();
@@ -150,7 +148,7 @@ public class View implements ActionListener {
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) //bring everything back to saturday
+		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) //bring everything back to Saturday
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
@@ -238,19 +236,13 @@ public class View implements ActionListener {
 		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	//Constructors-----------------------------------------------
 	public View()
 	{
 		m = null;
 		c = null;
 		cFrame = new JFrame();
-		tf = new TaskFrame();
+		vFrame = new JFrame();
 	}
 
 
