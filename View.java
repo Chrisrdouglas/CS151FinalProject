@@ -42,7 +42,6 @@ public class View implements ActionListener {
 	public void addBoth(Model m, Controller c)
 	{
 		this.m = m;
-		
 		this.c = c;
 	}
 	
