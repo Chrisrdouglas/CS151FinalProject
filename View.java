@@ -5,14 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.plaf.basic.BasicArrowButton;
 
 public class View implements ActionListener {
@@ -21,6 +25,8 @@ public class View implements ActionListener {
 	private Controller c;
 	private JFrame cFrame;
 	private TaskFrame tf;
+	private ArrayList<JToggleButton> dateButtons;
+	private ButtonGroup f;
 	
 	//Methods----------------------------------------------------
 	public void addModel(Model m)
@@ -111,12 +117,11 @@ public class View implements ActionListener {
 		
 		//add the numbers
 		JPanel dates = new JPanel();
-		//dates.setLayout(new GridLayout(5,7));
-		ArrayList<JButton> dat = this.drawDates();
-		dates.setLayout(new GridLayout(dat.size()/7,7));
-		for(JButton i : dat)
+		ButtonGroup buttonGroup = this.drawDates();
+		dates.setLayout(new GridLayout(buttonGroup.getButtonCount()/7,7));
+		for(Enumeration<AbstractButton> e = buttonGroup.getElements(); e.hasMoreElements();)
 		{
-			dates.add(i);
+			dates.add(e.nextElement());
 		}
 		
 		
@@ -135,9 +140,11 @@ public class View implements ActionListener {
 		cFrame.setVisible(true);
 	}
 	
-	public ArrayList<JButton> drawDates() {
-		ArrayList<JButton> i = new ArrayList<>();
-		JButton b = null;
+	
+	public ButtonGroup drawDates() {
+		//ArrayList<JToggleButton> i = new ArrayList<>();
+		ButtonGroup i = new ButtonGroup();
+		JToggleButton b = null;
 		GregorianCalendar selectedMonth = m.getSelectedMonth();
 		while(selectedMonth.get(Calendar.DATE) != 1) //bring everything back to 1
 		{
@@ -180,15 +187,15 @@ public class View implements ActionListener {
 		//**PRINT GRAY SATURDAY
 		b = this.createDate(selectedMonth.get(Calendar.DATE));
 		i.add(b);
-		
+		this.f = i;
 		return i;
 	}
 	
-	public JButton createDate(int date){
+	public JToggleButton createDate(int date){
 		String num = String.valueOf(date);
-		JButton day = new JButton(num);
+		JToggleButton day = new JToggleButton(num);
 		day.setFocusPainted(false);
-		day.setContentAreaFilled(false);
+		//day.setContentAreaFilled(false);
 		//day.setBorderPainted(false);
 		return day;
 		}
