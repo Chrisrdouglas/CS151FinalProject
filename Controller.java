@@ -19,6 +19,7 @@ public class Controller {
 	private static SimpleDateFormat MonthDYYYY = new SimpleDateFormat("MMMM d, YYYY");	//printing out the date in "[Name of Month] [Date], [YYYY]"
 	private static SimpleDateFormat DMonthDYYYY = new SimpleDateFormat("EEEE MM/d/YYYY");
 	private static SimpleDateFormat fileFormatter = new SimpleDateFormat("MMMM_YYYY");
+	private static SimpleDateFormat Month = new SimpleDateFormat("MMMM");	//printing out the date in "[Name of Month] [Date], [YYYY]"
 	
 	
 	//Methods----------------------------------------------------
@@ -41,6 +42,7 @@ public class Controller {
 		GregorianCalendar g = this.m.getSelectedMonth();
 		g.add(Calendar.MONTH, 1);
 		this.m.setSelectedMonth(g);
+		this.v.drawCF();
 	}
 	
 	public void subMonth()
@@ -48,6 +50,7 @@ public class Controller {
 		GregorianCalendar g = this.m.getSelectedMonth();
 		g.add(Calendar.MONTH, -1);
 		this.m.setSelectedMonth(g);
+		this.v.drawCF();
 	}
 	
 	
@@ -56,6 +59,7 @@ public class Controller {
 		GregorianCalendar g = this.m.getSelectedMonth();
 		g.add(Calendar.YEAR, 1);
 		this.m.setSelectedMonth(g);
+		this.v.drawCF();
 	}
 	
 	public void subYear()
@@ -63,11 +67,12 @@ public class Controller {
 		GregorianCalendar g = this.m.getSelectedMonth();
 		g.add(Calendar.YEAR, -1);
 		this.m.setSelectedMonth(g);
+		this.v.drawCF();
 	}
 	
 	public String selectedMonthToString()
 	{
-		return "January";
+		return Month.format(new Date(0,this.m.getSelectedMonth().get(Calendar.MONTH)+1,0));
 	}
 	
 	public String formatToday()
