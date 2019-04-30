@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -8,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -20,6 +25,7 @@ public class Controller {
 	private static SimpleDateFormat DMonthDYYYY = new SimpleDateFormat("EEEE MM/d/YYYY");
 	private static SimpleDateFormat fileFormatter = new SimpleDateFormat("MMMM_YYYY");
 	private static SimpleDateFormat Month = new SimpleDateFormat("MMMM");	//printing out the date in "[Name of Month] [Date], [YYYY]"
+	private static Pattern importer = Pattern.compile("\\{Date:\\s(\\d{8})\\t\\tTask:\\s(.*)\\}");
 	
 	
 	//Methods----------------------------------------------------
@@ -99,6 +105,30 @@ public class Controller {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void importer(String s)
+	{
+		if(this.m == null)
+		{
+			return;
+		}
+		try {
+			Scanner reader = new Scanner(new File(s));
+			while(reader.hasNext())
+			{
+				String toConvert = reader.nextLine();
+				Matcher m = importer.matcher(toConvert);
+				if(m.matches())
+				{
+					this.m.addTask(new Dates(m.group(2), Integer.parseInt(m.group(1))));
+				}
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			return;
 		}
 	}
 	
