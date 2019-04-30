@@ -13,9 +13,6 @@ public class Model {
 	private GregorianCalendar selectedMonth;//used for displaying the calendar
 	private GregorianCalendar selectedDay;	//used for keeping track of the highlighted day
 	private GregorianCalendar today;		//today's date
-	//private static SimpleDateFormat MonthDYYYY = new SimpleDateFormat("MMMM d, YYYY");	//printing out the date in "[Name of Month] [Date], [YYYY]"
-	//private static SimpleDateFormat DMonthDYYYY = new SimpleDateFormat("EEEE MM/d/YYYY");
-	//private static SimpleDateFormat fileFormatter = new SimpleDateFormat("MMMM_YYYY");
 	
 	//Methods----------------------------------------------------
 	public void addController(Controller c)
@@ -64,6 +61,13 @@ public class Model {
 	{
 		Dates d = new Dates(name, year, month, day);
 		//Dates today's date = new Dates("", selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), selectedDay.get(Calendar.DAY_OF_MONTH));
+		this.addTask(d);
+	}
+	
+	public void addTask(Dates d)
+	{
+		//Dates d = new Dates(name, year, month, day);
+		//Dates today's date = new Dates("", selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), selectedDay.get(Calendar.DAY_OF_MONTH));
 		days.add(d);
 		Comparator<Dates> byDate = (Dates o1, Dates o2)->{return o1.compareTo(o2);};
 		days.sort(byDate);
@@ -105,7 +109,7 @@ public class Model {
 			}
 		}
 		
-		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}
 	
 	public void editTask(String newName, String oldName, int year, int month, int day)
@@ -120,14 +124,14 @@ public class Model {
 			}
 		}
 		
-		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}
 	
 	public void editTask(String newName)
 	{
 		selectedTask.setTask(newName);
 		
-		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}
 	
 	public ArrayList<String> exportList()	//export the tasks in the selected day's month
