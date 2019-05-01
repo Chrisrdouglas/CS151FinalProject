@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.basic.BasicArrowButton;
@@ -24,8 +26,8 @@ public class View{
 	private Model m;
 	private Controller c;
 	private JFrame cFrame;
-	private JFrame vFrame;
-	private ButtonGroup f;
+	private JFrame tFrame;
+	private ArrayList<Dates> taskList;
 	
 	//Methods----------------------------------------------------
 	public void addModel(Model m)
@@ -123,8 +125,6 @@ public class View{
 			dates.add(e.nextElement());
 		}
 		
-		
-		
 		//display today's date
 		String todayDate = "Today: " + c.formatToday();
 		JLabel today = new JLabel(todayDate);
@@ -139,23 +139,30 @@ public class View{
 		cFrame.setVisible(true);
 	}
 	
-	
+	//generates the grid of dates
+	//returns a ButtonGroup
 	public ButtonGroup drawDates() {
 		ButtonGroup i = new ButtonGroup();
 		JToggleButton b = null;
 		GregorianCalendar selectedMonth = m.getSelectedMonth();
-		while(selectedMonth.get(Calendar.DATE) != 1) //bring everything back to 1
+		
+		//bring everything back to 1
+		while(selectedMonth.get(Calendar.DATE) != 1) 
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) //bring everything back to Saturday
+		
+		//bring everything back to Saturday
+		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) 
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		while(selectedMonth.get(Calendar.DATE) != 1) //add previous months days
+		
+		//add previous months days
+		while(selectedMonth.get(Calendar.DATE) != 1) 
 		{
-			//**ADD GRAYED OUT DATES HERE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.setForeground(Color.gray);
 			b.addActionListener(event -> 
 			{
 				c.subMonth();
@@ -163,15 +170,17 @@ public class View{
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		//while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) //add up until end of month
-		while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) //add up until end of month
+		
+		//add up until end of month
+		while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) 
 		{
-			//**PRINT BLACK DATE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
 			b.addActionListener(event -> 
 			{
 				c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
 			});
+			
+			
 		//okay so you're not going to understand what i did here when you look at this x days from now...
 		//basically we got the event source (the JToggleButton), casted it,
 		//then got it's text, then told the controller to change the selected day
@@ -179,7 +188,8 @@ public class View{
 			selectedMonth.add(Calendar.DATE, 1);
 		}
 		
-		if(selectedMonth.get(Calendar.DATE) == 31)
+		//adds and prints last day of month
+		if(selectedMonth.get(Calendar.DATE) == 31 || selectedMonth.get(Calendar.DATE) == 30 ||selectedMonth.get(Calendar.DATE) == 29 ||selectedMonth.get(Calendar.DATE) == 28 )
 		{
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
 			b.addActionListener(event -> 
@@ -190,10 +200,11 @@ public class View{
 			selectedMonth.add(Calendar.DATE, 1);
 		}
 		
-		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 7) //add until saturday gets added
+		//add until saturday gets added
+		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 7) 
 		{
-			//**PRINT GRAY DATE
 			b = this.createDate(selectedMonth.get(Calendar.DATE));
+			b.setForeground(Color.gray);
 			b.addActionListener(event -> 
 			{
 				c.addMonth();
@@ -201,14 +212,15 @@ public class View{
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		//**PRINT GRAY SATURDAY
+		
+		//prints gray Saturday
 		b = this.createDate(selectedMonth.get(Calendar.DATE));
+		b.setForeground(Color.gray);
 		b.addActionListener(event -> 
 		{
 			c.addMonth();
 		});
 		i.add(b);
-		this.f = i;
 		return i;
 	}
 	
@@ -220,20 +232,71 @@ public class View{
 		//day.setBorderPainted(false);
 		return day;
 		}
-	
-	public static void createDate(int date, JComponent c){
-		String num = String.valueOf(date);
-		JButton day = new JButton(num);
-		//day.setFocusPainted(false);
-		day.setContentAreaFilled(false);
-		//day.setBorderPainted(false);
-		c.add(day);
-		}	
+
 	
 
 	public void drawTF()
 	{
+		tFrame.getContentPane().removeAll();
+		tFrame.setLayout(new BorderLayout());
 		
+		//Creates label area to print out date at top of the window
+		JLabel date = new JLabel("Day: " + c.formatTaskDate());
+
+		
+		//Creates the scrolling area that displays tasks as a list
+		JPanel taskList = new JPanel();
+		ButtonGroup taskButtons = drawTasks();
+		taskList.setLayout(new GridLayout(this.taskList.size(), 1));	
+		for(Enumeration<AbstractButton> e = taskButtons.getElements(); e.hasMoreElements();)
+		{
+			taskList.add(e.nextElement());
+		}
+		JScrollPane scroller = new JScrollPane(taskList);
+
+		
+		//Adds the user text entry box and task buttons
+		//**NEED TO MAKE IT LOOK PRETTIER (it looks u g l y)
+		JPanel taskPanel = new JPanel();					//Panel that formats textfield and buttons
+		taskPanel.setLayout(new BorderLayout());
+		JTextField userText = new JTextField(20);
+		taskPanel.add(userText, BorderLayout.NORTH);
+		
+		JPanel buttons = new JPanel();						//Panel that formats button positions
+		buttons.setLayout(new GridLayout(1,4));
+		createButton("Delete Task", buttons);
+		createButton("Edit Task", buttons);
+		createButton("Add Task", buttons);
+		createButton("Export", buttons);
+		taskPanel.add(buttons,BorderLayout.SOUTH);
+
+		
+		//formats things into frame
+		tFrame.add(date, BorderLayout.NORTH);
+		tFrame.add(scroller, BorderLayout.CENTER);
+		tFrame.add(taskPanel, BorderLayout.SOUTH);
+		
+		tFrame.setSize(300,300);
+		tFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		tFrame.setVisible(true);
+	}
+	
+	public void createButton(String name, JComponent c){
+		JButton button = new JButton(name);
+		button.setFocusPainted(false);
+		button.setContentAreaFilled(false);
+		c.add(button);
+	}
+	
+	public ButtonGroup drawTasks() {
+		ButtonGroup tasks = new ButtonGroup();
+		JToggleButton b = null;
+		taskList = m.getTasks();
+		for(Dates task : taskList) {
+			b = new JToggleButton(task.getTask());
+			tasks.add(b);
+		}
+		return tasks;
 	}
 	
 	//Constructors-----------------------------------------------
@@ -242,7 +305,8 @@ public class View{
 		m = null;
 		c = null;
 		cFrame = new JFrame();
-		vFrame = new JFrame();
+		tFrame = new JFrame();
+		taskList = null;
 	}
 
 

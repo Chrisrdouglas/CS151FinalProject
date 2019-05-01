@@ -49,6 +49,16 @@ public class Model {
 	{
 		return (GregorianCalendar) selectedDay.clone();
 	}
+	
+	public ArrayList<Dates> getTasks(){
+		ArrayList<Dates> taskList = new ArrayList<Dates>();
+		Dates task = new Dates("", selectedDay.get(Calendar.YEAR), selectedDay.get(Calendar.MONTH), selectedDay.get(Calendar.DATE));
+		for(Dates d : days) {
+			if(task.compareTo(d) == 0)
+				taskList.add(d);
+		}
+		return taskList;
+	}
 
 	
 	public void addTask(String name)
