@@ -231,7 +231,7 @@ public class View{
 		//day.setContentAreaFilled(false);
 		//day.setBorderPainted(false);
 		return day;
-		}
+	}
 
 	
 
@@ -262,12 +262,43 @@ public class View{
 		JTextField userText = new JTextField(20);
 		taskPanel.add(userText, BorderLayout.NORTH);
 		
+		
+		//**NONE OF THESE METHODS FUCKING WORK
+		//**GET SELECTEDTASK IN CONTROLLER TO WORK
 		JPanel buttons = new JPanel();						//Panel that formats button positions
 		buttons.setLayout(new GridLayout(1,4));
-		createButton("Delete Task", buttons);
-		createButton("Edit Task", buttons);
-		createButton("Add Task", buttons);
-		createButton("Export", buttons);
+		
+		//delete boi
+		JButton delete = new JButton("Delete Task");
+		delete.addActionListener(event -> {
+			m.removeTask();
+		});
+		
+		//edit boi
+		JButton edit = new JButton("Edit Task");
+		edit.addActionListener(event -> {
+			String newName = userText.getText();
+			m.editTask(newName);
+		});
+		
+		//add boi
+		JButton add = new JButton("Add Task");
+		add.addActionListener(event -> {
+			String taskName = userText.getText();
+			m.addTask(taskName);
+		});
+		
+		//export boi
+		JButton export = new JButton("Export");
+		export.addActionListener(event -> {
+			c.export();  			//**NOT SURE IF THIS IS THE RIGHT EXPORT
+		});
+		
+		//add buttons to button panel
+		buttons.add(delete);
+		buttons.add(edit);
+		buttons.add(add);
+		buttons.add(export);
 		taskPanel.add(buttons,BorderLayout.SOUTH);
 
 		
@@ -281,12 +312,6 @@ public class View{
 		tFrame.setVisible(true);
 	}
 	
-	public void createButton(String name, JComponent c){
-		JButton button = new JButton(name);
-		button.setFocusPainted(false);
-		button.setContentAreaFilled(false);
-		c.add(button);
-	}
 	
 	public ButtonGroup drawTasks() {
 		ButtonGroup tasks = new ButtonGroup();
