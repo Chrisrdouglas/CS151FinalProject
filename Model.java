@@ -52,7 +52,7 @@ public class Model {
 	
 	public ArrayList<Dates> getTasks(){
 		ArrayList<Dates> taskList = new ArrayList<Dates>();
-		Dates task = new Dates("", selectedDay.get(Calendar.YEAR), selectedDay.get(Calendar.MONTH), selectedDay.get(Calendar.DATE));
+		Dates task = new Dates("", selectedDay.get(Calendar.YEAR), selectedDay.get(Calendar.MONTH)+1, selectedDay.get(Calendar.DATE));
 		for(Dates d : days) {
 			if(task.compareTo(d) == 0)
 				taskList.add(d);
@@ -65,12 +65,13 @@ public class Model {
 	{
 		//Dates d = new Dates(name, year, month, day);
 		Dates d = new Dates(name, selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), selectedDay.get(Calendar.DAY_OF_MONTH));
-		days.add(d);
-		Comparator<Dates> byDate = (Dates o1, Dates o2)->{return o1.compareTo(o2);};
-		days.sort(byDate);
-		
+		//days.add(d);
+		//Comparator<Dates> byDate = (Dates o1, Dates o2)->{return o1.compareTo(o2);};
+		//days.sort(byDate);
+		this.addTask(d);
 		//THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
 	}	
+	
 	
 	public void addTask(String name, int year, int month, int day)
 	{
@@ -88,6 +89,7 @@ public class Model {
 		days.sort(byDate);
 		
 		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		controller.updateTF();
 	}
 	
 	public void removeTask()
@@ -109,6 +111,20 @@ public class Model {
 		}
 		
 		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		controller.updateTF();
+	}
+	
+	public void removeTask(String s)
+	{
+		Dates d = new Dates(s, selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), selectedDay.get(Calendar.DAY_OF_MONTH));
+		for(int i = 0; i< days.size(); i++)
+		{
+			if(days.get(i).equals(d))
+			{
+				days.remove(i);
+				return;
+			}
+		}
 	}
 	
 	public void removeTask(String name, int year, int month, int day)
@@ -147,14 +163,11 @@ public class Model {
 		selectedTask.setTask(newName);
 		
 		//**THIS IS WHERE WE'RE GOING TO WANT TO ADD THE CODE TO NOTIFY THE CONTROLLER TO UPDATE THE TASKVIEW FRAME
+		controller.updateTF();
 	}
 	
 	public ArrayList<String> exportList()	//export the tasks in the selected day's month
 	{
-		//get the first and last day of the months.
-		//String fileName = fileFormatter.format(new Date(selectedDay.get(Calendar.YEAR)-1900, selectedDay.get(Calendar.MONTH), selectedDay.get(Calendar.DATE)));
-		//Path p = Paths.get(fileName+".txt");
-		//get the first and last day of the months.
 		Dates startDate = new Dates("", selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), 1);
 		Dates endDate = new Dates("", selectedDay.get(Calendar.YEAR), (selectedDay.get(Calendar.MONTH)+1), selectedDay.getActualMaximum(Calendar.DAY_OF_MONTH));
 		ArrayList<String> s = new ArrayList<>();
@@ -168,6 +181,18 @@ public class Model {
 			}
 		}
 		return s;
+	}
+	
+	public void selectTask(String s)
+	{
+		Dates task = new Dates(s, selectedDay.get(Calendar.YEAR), selectedDay.get(Calendar.MONTH)+1, selectedDay.get(Calendar.DATE));
+		for(Dates d: days)
+		{
+			if (task.equals(d))
+			{
+				selectedTask = d;
+			}
+		}
 	}
 	
 	//Constructors-----------------------------------------------

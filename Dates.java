@@ -40,7 +40,7 @@ public class Dates implements Comparable{
 		{
 			Dates d = (Dates) o;
 			//compare
-			if(this.date == d.date)
+			if(this.date == d.date && this.task.equals(d.task))
 			{
 				return true;
 			}

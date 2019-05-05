@@ -256,7 +256,7 @@ public class View{
 
 		
 		//Adds the user text entry box and task buttons
-		//**NEED TO MAKE IT LOOK PRETTIER (it looks u g l y)
+		//**NEED TO MAKE IT LOOK PRETTIER (it looks u g l y) // no it's our beautiful baby. donut call it ugly
 		JPanel taskPanel = new JPanel();					//Panel that formats textfield and buttons
 		taskPanel.setLayout(new BorderLayout());
 		JTextField userText = new JTextField(20);
@@ -291,7 +291,7 @@ public class View{
 		//export boi
 		JButton export = new JButton("Export");
 		export.addActionListener(event -> {
-			c.export();  			//**NOT SURE IF THIS IS THE RIGHT EXPORT
+			c.export();
 		});
 		
 		//add buttons to button panel
@@ -319,6 +319,10 @@ public class View{
 		taskList = m.getTasks();
 		for(Dates task : taskList) {
 			b = new JToggleButton(task.getTask());
+			b.addActionListener(event -> 
+			{
+				m.selectTask(((JToggleButton) event.getSource()).getText());
+			});
 			tasks.add(b);
 		}
 		return tasks;
