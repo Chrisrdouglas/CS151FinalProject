@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicArrowButton;
 
 public class View{
@@ -28,39 +29,39 @@ public class View{
 	private JFrame cFrame;
 	private JFrame tFrame;
 	private ArrayList<Dates> taskList;
-	
+
 	//Methods----------------------------------------------------
 	public void addModel(Model m)
 	{
 		this.m = m;
 	}
-	
+
 	public void addController(Controller c)
 	{
 		this.c = c;
 	}
-	
+
 	public void addBoth(Model m, Controller c)
 	{
 		this.m = m;
 		this.c = c;
 	}
-	
+
 	public void drawCF()
 	{
-		
+
 		cFrame.getContentPane().removeAll();
-		
+
 		cFrame.setLayout(new BorderLayout());
-		
+
 		//panel that holds navigation/days of week
 		JPanel monthDisplay = new JPanel();
 		monthDisplay.setLayout(new GridLayout(2,1));
-		
+
 		//creates the month/year navigation 
 		JPanel navigation = new JPanel();
 		navigation.setLayout(new GridLayout(1,4));
-		
+
 		//arrow buttons
 		BasicArrowButton leftArrow = new BasicArrowButton(BasicArrowButton.WEST);
 		leftArrow.addActionListener(event -> {
@@ -70,9 +71,9 @@ public class View{
 		rightArrow.addActionListener(event -> {
 			c.addMonth();
 		});
-		
+
 		//month and years
-		JLabel month = new JLabel(c.selectedMonthToString());
+		JLabel month = new JLabel(c.selectedMonthToString(), SwingConstants.CENTER);
 		JPanel yearPanel = new JPanel();
 		yearPanel.setLayout(new FlowLayout());
 		JTextField year = new JTextField(String.valueOf(m.getSelectedYear()));
@@ -82,25 +83,25 @@ public class View{
 		upArrow.addActionListener(event ->{
 			c.addYear();
 		});
-		
+
 		BasicArrowButton downArrow = new BasicArrowButton(BasicArrowButton.SOUTH);
 		downArrow.addActionListener(event ->{
 			c.subYear();
 		});
-		
+
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(2,1));
 		buttons.add(upArrow);
 		buttons.add(downArrow);
 		yearPanel.add(buttons);
-		
-	
+
+
 		//add stuff to navigation panel
 		navigation.add(leftArrow);
 		navigation.add(month);
 		navigation.add(yearPanel);
 		navigation.add(rightArrow);
-		
+
 		//days of week panel
 		JPanel week = new JPanel();
 		week.setLayout(new GridLayout(1,7));
@@ -111,11 +112,11 @@ public class View{
 		week.add(new JLabel("    Thu"));
 		week.add(new JLabel("    Fri"));
 		week.add(new JLabel("    Sat"));
-		
+
 		//add stuff to monthDisplay
 		monthDisplay.add(navigation);
 		monthDisplay.add(week);
-		
+
 		//add the numbers
 		JPanel dates = new JPanel();
 		ButtonGroup buttonGroup = this.drawDates();
@@ -124,11 +125,11 @@ public class View{
 		{
 			dates.add(e.nextElement());
 		}
-		
+
 		//display today's date
 		String todayDate = "Today: " + c.formatToday();
 		JLabel today = new JLabel(todayDate);
-		
+
 		//add stuff to frame
 		cFrame.add(monthDisplay, BorderLayout.NORTH);
 		cFrame.add(dates, BorderLayout.CENTER);
@@ -138,26 +139,26 @@ public class View{
 		cFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cFrame.setVisible(true);
 	}
-	
+
 	//generates the grid of dates
 	//returns a ButtonGroup
 	public ButtonGroup drawDates() {
 		ButtonGroup i = new ButtonGroup();
 		JToggleButton b = null;
 		GregorianCalendar selectedMonth = m.getSelectedMonth();
-		
+
 		//bring everything back to 1
 		while(selectedMonth.get(Calendar.DATE) != 1) 
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		
+
 		//bring everything back to Saturday
 		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 1) 
 		{
 			selectedMonth.add(Calendar.DATE, -1);
 		}
-		
+
 		//add previous months days
 		while(selectedMonth.get(Calendar.DATE) != 1) 
 		{
@@ -170,24 +171,36 @@ public class View{
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		
+
 		//add up until end of month
 		while(selectedMonth.get(Calendar.DATE) != selectedMonth.getActualMaximum(Calendar.DAY_OF_MONTH)) 
 		{
-			b = this.createDate(selectedMonth.get(Calendar.DATE));
-			b.addActionListener(event -> 
-			{
-				c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
-			});
-			
-			
-		//okay so you're not going to understand what i did here when you look at this x days from now...
-		//basically we got the event source (the JToggleButton), casted it,
-		//then got it's text, then told the controller to change the selected day
+			//prints today's date in red
+			if(selectedMonth.get(Calendar.DATE) == m.getToday().get(Calendar.DATE) 
+					&& selectedMonth.get(Calendar.MONTH) == m.getToday().get(Calendar.MONTH)
+					&& selectedMonth.get(Calendar.YEAR) == m.getToday().get(Calendar.YEAR)) {
+				b = this.createDate(selectedMonth.get(Calendar.DATE));
+				b.setForeground(Color.red);
+				b.addActionListener(event -> 
+				{
+					c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
+				});
+			} else {
+				b = this.createDate(selectedMonth.get(Calendar.DATE));
+				b.addActionListener(event -> 
+				{
+					c.changeSelectedDay(((AbstractButton) event.getSource()).getText());
+				});
+			}
+
+
+			//okay so you're not going to understand what i did here when you look at this x days from now...
+			//basically we got the event source (the JToggleButton), casted it,
+			//then got it's text, then told the controller to change the selected day
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		
+
 		//adds and prints last day of month
 		if(selectedMonth.get(Calendar.DATE) == 31 || selectedMonth.get(Calendar.DATE) == 30 ||selectedMonth.get(Calendar.DATE) == 29 ||selectedMonth.get(Calendar.DATE) == 28 )
 		{
@@ -199,7 +212,7 @@ public class View{
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		
+
 		//add until saturday gets added
 		while(selectedMonth.get(Calendar.DAY_OF_WEEK) != 7) 
 		{
@@ -212,7 +225,7 @@ public class View{
 			i.add(b);
 			selectedMonth.add(Calendar.DATE, 1);
 		}
-		
+
 		//prints gray Saturday
 		b = this.createDate(selectedMonth.get(Calendar.DATE));
 		b.setForeground(Color.gray);
@@ -223,7 +236,7 @@ public class View{
 		i.add(b);
 		return i;
 	}
-	
+
 	public JToggleButton createDate(int date){
 		String num = String.valueOf(date);
 		JToggleButton day = new JToggleButton(num);
@@ -233,17 +246,17 @@ public class View{
 		return day;
 	}
 
-	
+
 
 	public void drawTF()
 	{
 		tFrame.getContentPane().removeAll();
 		tFrame.setLayout(new BorderLayout());
-		
+
 		//Creates label area to print out date at top of the window
 		JLabel date = new JLabel("Day: " + c.formatTaskDate());
 
-		
+
 		//Creates the scrolling area that displays tasks as a list
 		JPanel taskList = new JPanel();
 		ButtonGroup taskButtons = drawTasks();
@@ -254,46 +267,44 @@ public class View{
 		}
 		JScrollPane scroller = new JScrollPane(taskList);
 
-		
+
 		//Adds the user text entry box and task buttons
 		//**NEED TO MAKE IT LOOK PRETTIER (it looks u g l y) // no it's our beautiful baby. donut call it ugly
 		JPanel taskPanel = new JPanel();					//Panel that formats textfield and buttons
 		taskPanel.setLayout(new BorderLayout());
 		JTextField userText = new JTextField(20);
 		taskPanel.add(userText, BorderLayout.NORTH);
-		
-		
-		//**NONE OF THESE METHODS FUCKING WORK
-		//**GET SELECTEDTASK IN CONTROLLER TO WORK
+
+
 		JPanel buttons = new JPanel();						//Panel that formats button positions
 		buttons.setLayout(new GridLayout(1,4));
-		
+
 		//delete boi
 		JButton delete = new JButton("Delete Task");
 		delete.addActionListener(event -> {
 			m.removeTask();
 		});
-		
+
 		//edit boi
 		JButton edit = new JButton("Edit Task");
 		edit.addActionListener(event -> {
 			String newName = userText.getText();
 			m.editTask(newName);
 		});
-		
+
 		//add boi
 		JButton add = new JButton("Add Task");
 		add.addActionListener(event -> {
 			String taskName = userText.getText();
 			m.addTask(taskName);
 		});
-		
+
 		//export boi
 		JButton export = new JButton("Export");
 		export.addActionListener(event -> {
 			c.export();
 		});
-		
+
 		//add buttons to button panel
 		buttons.add(delete);
 		buttons.add(edit);
@@ -301,18 +312,18 @@ public class View{
 		buttons.add(export);
 		taskPanel.add(buttons,BorderLayout.SOUTH);
 
-		
+
 		//formats things into frame
 		tFrame.add(date, BorderLayout.NORTH);
 		tFrame.add(scroller, BorderLayout.CENTER);
 		tFrame.add(taskPanel, BorderLayout.SOUTH);
-		
+
 		tFrame.setSize(300,300);
 		tFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tFrame.setVisible(true);
 	}
-	
-	
+
+
 	public ButtonGroup drawTasks() {
 		ButtonGroup tasks = new ButtonGroup();
 		JToggleButton b = null;
@@ -327,7 +338,7 @@ public class View{
 		}
 		return tasks;
 	}
-	
+
 	//Constructors-----------------------------------------------
 	public View()
 	{
