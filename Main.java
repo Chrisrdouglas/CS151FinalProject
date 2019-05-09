@@ -13,9 +13,9 @@ public class Main {
 		print(c.formatToday());
 		//m.export();
 		
-		m.addTask("Batman", 2019, 5, 5);
-		m.addTask("Superman", 2019, 5, 5);
-		m.addTask("Wonder Woman", 2019, 5, 5);
+		m.addTask("Do homework", 2019, 5, 8);
+		m.addTask("Print handouts", 2019, 5, 8);
+		m.addTask("Cry", 2019, 5, 8);
 		m.addTask("Cyborg", 2019, 4, 30);
 		m.addTask("Fanime", 2019, 5, 24);
 		

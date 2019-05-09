@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
@@ -28,7 +31,9 @@ public class View{
 	private Controller c;
 	private JFrame cFrame;
 	private JFrame tFrame;
+	private JFrame monthTasks;
 	private ArrayList<Dates> taskList;
+	private Dimension dim;
 
 	//Methods----------------------------------------------------
 	public void addModel(Model m)
@@ -45,6 +50,28 @@ public class View{
 	{
 		this.m = m;
 		this.c = c;
+	}
+	
+	public void drawMonthTasks() {
+		monthTasks.getContentPane().removeAll();
+		monthTasks.setLayout(new BorderLayout());
+		GregorianCalendar selectedMonth = m.getSelectedMonth();
+		
+		JTextArea taskArea = new JTextArea();
+		ArrayList<String> tasks = m.exportList();
+		
+		for(String s : tasks) {
+			taskArea.append(s);
+			taskArea.append("\n");
+		}
+		
+		monthTasks.add(taskArea, BorderLayout.CENTER);
+		monthTasks.setLocation(0, dim.height/3 + 100);
+		monthTasks.pack();
+		monthTasks.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		monthTasks.setVisible(true);
+		
+		
 	}
 
 	public void drawCF()
@@ -73,7 +100,10 @@ public class View{
 		});
 
 		//month and years
-		JLabel month = new JLabel(c.selectedMonthToString(), SwingConstants.CENTER);
+		JButton month = new JButton(c.selectedMonthToString());
+		month.addActionListener(event -> {
+			drawMonthTasks();
+		});
 		JPanel yearPanel = new JPanel();
 		yearPanel.setLayout(new FlowLayout());
 		JTextField year = new JTextField(String.valueOf(m.getSelectedYear()));
@@ -319,6 +349,7 @@ public class View{
 		tFrame.add(taskPanel, BorderLayout.SOUTH);
 
 		tFrame.setSize(300,300);
+		tFrame.setLocation(dim.width/3, 0);
 		tFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tFrame.setVisible(true);
 	}
@@ -346,7 +377,9 @@ public class View{
 		c = null;
 		cFrame = new JFrame();
 		tFrame = new JFrame();
+		monthTasks = new JFrame();
 		taskList = null;
+		dim = Toolkit.getDefaultToolkit().getScreenSize();
 	}
 
 
