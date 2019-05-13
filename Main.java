@@ -10,14 +10,14 @@ public class Main {
 		m.addController(c);
 		v.addBoth(m,c);
 		
-		print(c.formatToday());
+		//print(c.formatToday());
 		//m.export();
 		
-		m.addTask("Do homework", 2019, 5, 8);
-		m.addTask("Print handouts", 2019, 5, 8);
-		m.addTask("Cry", 2019, 5, 8);
-		m.addTask("Cyborg", 2019, 4, 30);
-		m.addTask("Fanime", 2019, 5, 24);
+		//m.addTask("Do homework", 2019, 5, 8);
+		//m.addTask("Print handouts", 2019, 5, 8);
+		//m.addTask("Cry", 2019, 5, 8);
+		//m.addTask("Cyborg", 2019, 4, 30);
+		//m.addTask("Fanime", 2019, 5, 24);
 		
 		//print(d.toString());
 		
@@ -25,18 +25,18 @@ public class Main {
 		
 		//c.importer("C:\\Users\\chris\\OneDrive\\workspaceO\\151 Final Project\\April_2019.txt");
 		
-		for(String s : m.exportList())
-		{
-			print(s);
-		}
+		//for(String s : m.exportList())
+		//{
+		//	print(s);
+		//}
 		
 		v.drawCF();
 		v.drawTF();
 		
 	}
 
-	static void print(String s)
-	{
-		System.out.println(s);
-	}
+	//static void print(String s)
+	//{
+	//	System.out.println(s);
+	//}
 }
